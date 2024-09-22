@@ -151,12 +151,13 @@
 
             const data = {
                 deviceData: deviceData,
+                mouseMovement: mouseMovement,
+                typingSpeed: typingSpeed,
+                typedWord: userWord,
                 totalDistance: totalDistance,
                 avgSpeed: avgSpeed,
                 directionChanges: directionChanges,
-                totalTime: totalTime,
-                typingSpeed: typingSpeed,
-                typedWord: userWord
+                totalTime: totalTime
             };
 
             fetch('https://script.google.com/macros/s/AKfycbzFt1DNqRr-g-OFnCIDYAiH-slHT1AzB5PSmHByocd9nJrIxb9rCXAEnnmLmtMwPf_qFA/exec', {
