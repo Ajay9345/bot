@@ -150,7 +150,7 @@
             const avgSpeed = calculateAvgSpeed();
 
             const data = {
-                ...deviceData,
+                deviceData: deviceData,
                 totalDistance: totalDistance,
                 avgSpeed: avgSpeed,
                 directionChanges: directionChanges,
@@ -159,7 +159,7 @@
                 typedWord: userWord
             };
 
-            fetch('/collect-data', {
+            fetch('https://script.google.com/macros/s/AKfycbyR-vHMH4hYrvaquCXA1t29WEnHUniwK3WHhBTSYEBrKOfldeUTjbZEWdYqnFiBPw0S6A/exec', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
