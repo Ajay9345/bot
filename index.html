@@ -5,64 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Collection for Bot Detection</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 400px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        p {
-            color: #666;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .task-box {
-            border: 2px dashed #ccc;
-            height: 150px;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #999;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .instruction {
-            font-size: 14px;
-            color: #999;
-        }
+        /* CSS styles */
     </style>
     <script>
         // Variables to track typing speed and mouse movements
@@ -71,46 +14,14 @@
         let totalDistance = 0;
         let directionChanges = 0;
         let totalTime = 0;
-
-        // Task word
         const taskWord = "UIDAI";
 
         document.addEventListener('DOMContentLoaded', function () {
             const taskBox = document.getElementById("task-box");
-
             let lastMovementTime = Date.now();
-            let lastDirectionX = null;
-            let lastDirectionY = null;
 
             taskBox.addEventListener('mousemove', function (event) {
-                const now = Date.now();
-
-                if (now - lastMovementTime > 100) {
-                    const x = event.clientX;
-                    const y = event.clientY;
-                    const timestamp = now;
-
-                    if (mouseMovement.length > 0) {
-                        const lastMovement = mouseMovement[mouseMovement.length - 1];
-                        const dx = x - lastMovement.x;
-                        const dy = y - lastMovement.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        totalDistance += distance;
-                        totalTime += (timestamp - lastMovement.timestamp) / 1000;  // Convert ms to seconds
-
-                        const directionX = dx > 0 ? 'right' : 'left';
-                        const directionY = dy > 0 ? 'up' : 'down';
-                        if (lastDirectionX && (lastDirectionX !== directionX || lastDirectionY !== directionY)) {
-                            directionChanges++;
-                        }
-                        lastDirectionX = directionX;
-                        lastDirectionY = directionY;
-                    }
-
-                    mouseMovement.push({ x, y, timestamp });
-                    lastMovementTime = now;
-                }
+                // Mouse movement tracking logic
             });
 
             const inputBox = document.getElementById("input-task");
@@ -119,12 +30,10 @@
             });
         });
 
-        // Function to calculate average speed
         function calculateAvgSpeed() {
             return totalDistance / totalTime;
         }
 
-        // Function to collect device info
         function collectDeviceData() {
             return {
                 userAgent: navigator.userAgent,
@@ -136,7 +45,6 @@
             };
         }
 
-        // Submit data to the backend
         function submitData() {
             const inputBox = document.getElementById("input-task");
             const userWord = inputBox.value;
@@ -151,13 +59,13 @@
 
             const data = {
                 deviceData: deviceData,
+                mouseMovement: mouseMovement,
+                typingSpeed: typingSpeed,
+                typedWord: userWord,
                 totalDistance: totalDistance,
                 avgSpeed: avgSpeed,
                 directionChanges: directionChanges,
-                totalTime: totalTime,
-                typingSpeed: typingSpeed,
-                typedWord: userWord,
-                mouseMovement: mouseMovement // Add this line
+                totalTime: totalTime
             };
 
             fetch('https://script.google.com/macros/s/AKfycbzFt1DNqRr-g-OFnCIDYAiH-slHT1AzB5PSmHByocd9nJrIxb9rCXAEnnmLmtMwPf_qFA/exec', {
@@ -174,25 +82,20 @@
     </script>
 </head>
 <body>
-
     <div class="container">
         <h1>Bot Detection Task</h1>
         <p>Please complete the tasks below to help us differentiate bots from human users.</p>
 
-        <!-- Task 1: Type a specific word -->
         <label for="input-task">Task 1: Type the word "<strong>UIDAI</strong>":</label>
         <input type="text" id="input-task" placeholder="Type UIDAI here">
 
-        <!-- Task 2: Move the mouse inside the box -->
         <label for="task-box">Task 2: Move your mouse inside this box:</label>
         <div id="task-box" class="task-box">
             Move the mouse here
         </div>
 
-        <!-- Submit button -->
         <button onclick="submitData()">Submit Data</button>
         <p class="instruction">* Your device and interaction data will be collected for analysis.</p>
     </div>
-
 </body>
 </html>
