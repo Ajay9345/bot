@@ -63,6 +63,9 @@
             font-size: 14px;
             color: #999;
         }
+        .hidden {
+            display: none;
+        }
     </style>
     <script>
         // Variables to track typing speed and mouse movements
@@ -140,11 +143,16 @@
         function submitData() {
             const inputBox = document.getElementById("input-task");
             const userWord = inputBox.value;
+            const submitButton = document.querySelector('button');
 
             if (userWord !== taskWord) {
                 alert(`Please enter the correct word: "${taskWord}"`);
                 return;
             }
+
+            // Disable the submit button after the first click
+            submitButton.disabled = true;
+            submitButton.style.cursor = 'not-allowed';
 
             const deviceData = collectDeviceData();
             const avgSpeed = calculateAvgSpeed();
@@ -168,10 +176,18 @@
                 mode: 'no-cors',
                 body: JSON.stringify(data)
             })
-            .then(() => console.log('Request sent (no response due to no-cors mode).'))
+            .then(() => {
+                // Show success message and hide form
+                document.querySelector('.container').innerHTML = `
+                    <h1>Data Collected Successfully</h1>
+                    <p>Thank you for your participation!</p>
+                `;
+            })
             .catch(error => {
                 console.error('Error:', error);
                 alert('Failed to submit data.');
+                submitButton.disabled = false;
+                submitButton.style.cursor = 'pointer';
             });
         }
     </script>
